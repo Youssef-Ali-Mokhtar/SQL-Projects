@@ -1,0 +1,24 @@
+SELECT continent, ROUND(AVG(fertility_rate),2) AS fertility_rate
+INTO fertility_2010
+FROM countries
+INNER JOIN populations
+	ON countries.code = populations.country_code
+WHERE (year = 2010)
+	AND (fertility_rate IS NOT NULL)
+GROUP BY continent;
+
+SELECT continent, ROUND(AVG(fertility_rate),2) AS fertility_rate
+INTO fertility_2015
+FROM countries
+INNER JOIN populations
+	ON countries.code = populations.country_code
+WHERE (year = 2015)
+	AND (fertility_rate IS NOT NULL)
+GROUP BY continent;
+
+SELECT fertility_2010.continent AS continent, fertility_2010.fertility_rate AS fertility_2010,
+ fertility_2015.fertility_rate AS fertility_2015,
+ CONCAT(ROUND((fertility_2015.fertility_rate - fertility_2010.fertility_rate)/fertility_2010.fertility_rate,2),'%') AS fertility_growth
+FROM fertility_2010
+INNER JOIN fertility_2015
+ 	ON fertility_2010.continent = fertility_2015.continent;
